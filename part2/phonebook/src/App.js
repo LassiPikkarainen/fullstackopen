@@ -14,7 +14,7 @@ const App = () => {
 
   const [infomessage, setInfomessage] = useState(null)
   const [errormessage, setErrormessage] = useState(null)
-
+/*
   const hook = () => {
     personService
       .getAll('http://localhost:3001/persons')
@@ -26,9 +26,21 @@ const App = () => {
 
   useEffect(() => {
     setFiltered(persons)
-  }, [persons]);
+
+  }, []);
+  */
+  useEffect(() => {
+    personService
+    .getAll('http://localhost:3001/persons')
+    .then(response => {
+      setPersons(response.data)
+      setFiltered(persons)
+      console.log(filteredPersons)
+    })
+  }, [setFiltered]);
+
   
-  useEffect(hook, persons)
+  //useEffect(hook, persons)
 
   const handleName = (event) => {
     setNewName(event.target.value)
@@ -46,7 +58,7 @@ const App = () => {
     else{
       setFiltered(persons.filter(person => person.name.toLowerCase().includes(filter)))
     }
-    
+    console.log(filteredPersons)
   }
 
   const addPerson = (event) => {
@@ -64,6 +76,8 @@ const App = () => {
         setPersons(persons.concat(person))
         setNewName('')
         setNewNumber('')
+        setFilter('')
+        setFiltered(persons)
       })
     }
     else {
