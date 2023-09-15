@@ -4,6 +4,5 @@ content-type: application/json
 {
   "title": "blog4",
   "author": "name",
-  "url": "test.com",
-  "likes": 123
+  "url": "test.com"
 }
