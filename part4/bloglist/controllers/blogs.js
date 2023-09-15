@@ -1,6 +1,7 @@
 const blogsRouter = require('express').Router()
 const { request, response } = require('express')
 const Blog = require('../models/blog')
+const next = require('next')
 
 blogsRouter.get('/', (request, response) => {
     Blog.find({}).then(blogs =>
@@ -17,6 +18,7 @@ blogsRouter.post('/', (request, response) => {
       .then(result => {
         response.status(201).json(result)
       })
+      .catch(error => response.status(400).send(error))
 })
 
 
