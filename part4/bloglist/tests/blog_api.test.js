@@ -86,17 +86,13 @@ test('adding blog increases the count by one', async () => {
 
 test('adding blog without title or url returns 400', async () => {
     const blogWithoutName = {
-        title: "blog3",
         author: "name",
-        url: "test.com",
         likes: 123
       }
-    const response = await api.post('/api/blogs').send(blog)
+    await api.post('/api/blogs').send(blogWithoutName)
+    .expect(400)
 
-    const newContents = await api.get('/api/blogs')
-    const newLen = newContents.body.length
-
-    expect(newLen).toBeGreaterThan(originalLength)
+    
 })
 
 
