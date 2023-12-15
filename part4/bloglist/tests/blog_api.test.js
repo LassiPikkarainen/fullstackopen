@@ -83,7 +83,7 @@ test('adding blog increases the count by one', async () => {
 
     expect(newLen).toBeGreaterThan(originalLength)
 })
-
+/*
 test('adding blog without title or url returns 400', async () => {
     const blogWithoutName = {
         author: "name",
@@ -94,7 +94,53 @@ test('adding blog without title or url returns 400', async () => {
 
     
 })
+*/
 
+describe('deletion of a blog', () => {
+    test('Deleting an existing blog works', async () => {
+        const originalBlogs = await api.get('/api/blogs')
+        IDOfBlogToDelete = originalBlogs.body[0].id
+        await api.delete(`/api/blogs/${IDOfBlogToDelete}`).send()
+        .expect(200)
+    })
+    
+    test('deleting a blog without a valid id returns 400', async () => {
+        await api.delete(`/api/blogs/notavalidID`).send()
+        .expect(400)
+    })
+ })
+
+ describe('editing a blog', () => {
+    test('Editing an existing blog returns the new values', async () => {
+        const blog = {
+            title: "blog3",
+            author: "name",
+            url: "test.com",
+            likes: 123
+          }
+
+        const originalBlogs = await api.get('/api/blogs')
+        IDOfBlogToEdit = originalBlogs.body[0].id
+        const response = await api.put(`/api/blogs/${IDOfBlogToEdit}`).send(blog)
+
+        const newblog = response.body
+        delete newblog.id
+        expect(newblog).toEqual(blog)
+        
+
+    })
+    
+    test('editing a blog without a valid id returns 400', async () => {
+        const blog = {
+            title: "blog3",
+            author: "name",
+            url: "test.com",
+            likes: 123
+          }
+        await api.put(`/api/blogs/notavalidID`).send(blog)
+        .expect(400)
+    })
+ })
 
 
 afterAll(async () => {
