@@ -3,6 +3,7 @@ content-type: application/json
 
 {
   "title": "blog4234",
-  "author": "name"
+  "author": "name",
+  "url": "urlk"
 }
 

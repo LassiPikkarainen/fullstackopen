@@ -5,6 +5,7 @@ const next = require('next')
 const User = require('../models/user')
 const jwt = require('jsonwebtoken')
 
+/*
 const getTokenFrom = request => { 
    const authorization = request.get('authorization')  
    if (authorization && authorization.startsWith('Bearer ')){    
@@ -12,6 +13,7 @@ const getTokenFrom = request => {
     }  
     return null
   }
+*/
 
 blogsRouter.get('/', (request, response) => {
     Blog.find({}).populate('user', { username: 1, name: 1 }).
@@ -24,10 +26,12 @@ blogsRouter.post('/', async (request, response) => {
     const body = request.body
     const users = await User.find()
     const UserID = users[0]._id
-    const decodedToken = jwt.verify(getTokenFrom(request), process.env.SECRET)
-    if (!decodedToken.id) {
-        return response.status(401).json({ error: 'token invalid' })  
-    }  
+    if (request.token == null){
+      return response.status(401).json({ error: 'token invalid' })
+    }
+    else{
+      const decodedToken = jwt.verify(request.token, process.env.SECRET)
+
     const activeuser = await User.findById(decodedToken.id)
     const blog = new Blog({
       title: body.title,
@@ -47,18 +51,38 @@ blogsRouter.post('/', async (request, response) => {
       await user.save()
       
       response.status(201).json(saved)
+    }
+
 })
 
-blogsRouter.delete('/:id', (request, response) => {
-  Blog.deleteOne({ _id: request.params.id }).then(result => {
-    if (result.deletedCount === 1) {
-      response.json(result)
+blogsRouter.delete('/:id', async (request, response) => {
+  if (request.token == null){
+    return response.status(401).json({ error: 'token invalid' })
+  }
+  else{
+    const decodedToken = jwt.verify(request.token, process.env.SECRET)
+
+  const activeuser = await User.findById(decodedToken.id)
+  const blog = await Blog.findById(request.params.id)
+  if (blog){
+    if ( blog.user.toString() === activeuser._id.toString()){
+      Blog.deleteOne({ _id: request.params.id }).then(result => {
+        if (result.deletedCount === 1) {
+          response.json(result)
+        }
+        else {
+          response.status(404).end()
+        }
+      })
+      .catch(error => response.status(400).send(error))
+    }else{
+      return response.status(401).json({ error: 'Blog belongs to another user' })
     }
-    else {
-      response.status(404).end()
-    }
-  })
-  .catch(error => response.status(400).send(error))
+  }else{
+    return response.status(404).end()
+  }
+
+}
 })
 
 

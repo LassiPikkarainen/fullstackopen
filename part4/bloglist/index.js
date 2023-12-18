@@ -8,6 +8,9 @@ const Blog = require('./models/blog')
 const configuration = require('./utils/config')
 const { config } = require('dotenv')
 const next = require('next')
+const jwt = require('jsonwebtoken')
+
+
 app.use(cors())
 app.use(express.json())
 
@@ -22,6 +25,10 @@ morgan.token('content', function(req, res) {
   })
   
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :content'))
+
+
+const tokenExtractor = require('./middleware/tokenExtractor') 
+app.use(tokenExtractor)
 
 
 const blogsRouter = require('./controllers/blogs')
@@ -45,6 +52,7 @@ const errorHandler = (error, request, response, next) => {
 }
 
 app.use(errorHandler)
+
 
 const PORT = configuration.PORT
 app.listen(PORT, () => {
