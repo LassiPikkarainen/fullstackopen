@@ -26,18 +26,19 @@ morgan.token('content', function(req, res) {
   
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :content'))
 
+//routes
+const blogsRouter = require('./controllers/blogs')
+const usersRouter = require('./controllers/users')
+const loginRouter = require('./controllers/login')
 
+//middleware
 const tokenExtractor = require('./middleware/tokenExtractor') 
+const userExtractor = require('./middleware/userExtractor')
+
 app.use(tokenExtractor)
 
-
-const blogsRouter = require('./controllers/blogs')
-app.use('/api/blogs', blogsRouter)
-
-const usersRouter = require('./controllers/users')
+app.use('/api/blogs', userExtractor, blogsRouter)
 app.use('/api/users', usersRouter)
-
-const loginRouter = require('./controllers/login')
 app.use('/api/login', loginRouter)
 
 const errorHandler = (error, request, response, next) => {

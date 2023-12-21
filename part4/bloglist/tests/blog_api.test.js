@@ -4,6 +4,7 @@ const app = require('../index')
 
 const api = supertest(app)
 const Blog = require('../models/blog')
+const User = require('../models/user')
 
 const initBlogs = [
     {
@@ -20,25 +21,41 @@ const initBlogs = [
       }
 ]
 
-beforeEach(async () => {  
+const user = {
+  username: "user123",
+  name: "name name",
+  password: "password"
+}
+
+const logininfo = {
+  username: "user123",
+  password: "password"
+}
+
+beforeEach(async () => { 
+    await User.deleteMany({}) 
+    //let testuser = new User(user)
+    
+    
     await Blog.deleteMany({})  
     let blogObject = new Blog(initBlogs[0])  
     await blogObject.save()  
-    blogObject = new Blog(initBlogs[0])  
+    blogObject = new Blog(initBlogs[1])  
     await blogObject.save()
 })
 
 test('like count defaults to 0', async () => {
+    await api.post('/api/users').send(user)
+    let res = await api.post('/api/login').send(logininfo)
+    obj = JSON.parse(res.text)
     await Blog.deleteMany({})
-
     const blog = {
         title: "blog without likes",
         author: "name",
         url: "test.com"
       }
 
-    await api.post('/api/blogs').send(blog)
-    
+    await api.post('/api/blogs').auth(obj.token, {type:'bearer'} ).send(blog)
     const response = await api.get('/api/blogs')
 
     const newblog = response.body[0]
@@ -69,14 +86,17 @@ test('id field is named id', async () => {
 test('adding blog increases the count by one', async () => {
     const original = await api.get('/api/blogs')
     const originalLength = original.body.length
-
+    await api.post('/api/users').send(user)
+    let res = await api.post('/api/login').send(logininfo)
+    obj = JSON.parse(res.text)
+    
     const blog = {
         title: "blog3",
         author: "name",
         url: "test.com",
         likes: 123
       }
-    const response = await api.post('/api/blogs').send(blog)
+    const response = await api.post('/api/blogs').auth(obj.token, {type:'bearer'} ).send(blog)
 
     const newContents = await api.get('/api/blogs')
     const newLen = newContents.body.length
@@ -98,14 +118,26 @@ test('adding blog without title or url returns 400', async () => {
 
 describe('deletion of a blog', () => {
     test('Deleting an existing blog works', async () => {
+        await Blog.deleteMany({})
+        await api.post('/api/users').send(user)
+        let res = await api.post('/api/login').send(logininfo)
+        obj = JSON.parse(res.text)
+        const usertoken = obj.token
+        await api.post('/api/blogs').auth(obj.token, {type:'bearer'} ).send(initBlogs[0])
+        await api.post('/api/blogs').auth(obj.token, {type:'bearer'} ).send(initBlogs[1])
         const originalBlogs = await api.get('/api/blogs')
+        //console.log(user)
+        //console.log(originalBlogs)
         IDOfBlogToDelete = originalBlogs.body[0].id
-        await api.delete(`/api/blogs/${IDOfBlogToDelete}`).send()
+        await api.delete(`/api/blogs/${IDOfBlogToDelete}`).auth(obj.token, {type:'bearer'} ).send()
         .expect(200)
     })
     
     test('deleting a blog without a valid id returns 400', async () => {
-        await api.delete(`/api/blogs/notavalidID`).send()
+      await api.post('/api/users').send(user)
+      let res = await api.post('/api/login').send(logininfo)
+      obj = JSON.parse(res.text)
+        await api.delete(`/api/blogs/notavalidID`).auth(obj.token, {type:'bearer'} ).send()
         .expect(400)
     })
  })
