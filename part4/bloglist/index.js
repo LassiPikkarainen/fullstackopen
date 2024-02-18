@@ -54,7 +54,6 @@ const errorHandler = (error, request, response, next) => {
 
 app.use(errorHandler)
 
-
 const PORT = configuration.PORT
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
