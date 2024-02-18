@@ -40,6 +40,7 @@ blogsRouter.post('/', async (request, response) => {
       likes: body.likes,
       user: activeuser._id
     })
+
     
     if (!blog.likes) {
       blog.likes = 0
@@ -51,7 +52,9 @@ blogsRouter.post('/', async (request, response) => {
       await user.save()
       
       response.status(201).json(saved)
+
     }
+
 
 })
 

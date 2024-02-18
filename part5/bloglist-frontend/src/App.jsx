@@ -4,6 +4,8 @@ import blogService from './services/blogs'
 import loginService from './services/login'
 import login from './components/loginform'
 
+import BlogForm from './components/blogform'
+
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('')
@@ -57,6 +59,7 @@ const App = () => {
       setErrorMessage(null)}, 5000)}
   }
 
+  /*
   const handleBlog = async (event) => {
     event.preventDefault()    
     console.log('Adding blog', title, author, url)
@@ -82,6 +85,24 @@ const App = () => {
       setTimeout(() => {        
       setErrorMessage(null)}, 5000)}
   }
+*/
+  const addBlog = (blogObject) => {    
+    console.log('Adding blog', blogObject)
+    console.log(blogObject)
+    setTitle('')
+    setAuthor('')
+    setUrl('')
+    try{
+      blogService.create(blogObject)
+      setErrorMessage(`A new blog was added`)
+      setTimeout(() => {        
+      setErrorMessage(null)}, 5000)
+    } catch (exception) {
+      setErrorMessage('Creating the blog failed')
+      setTimeout(() => {        
+      setErrorMessage(null)}, 5000)}
+    window.location.reload()
+}
 
 
     const logoutForm = () => (
@@ -92,6 +113,7 @@ const App = () => {
       </div>
     )
 
+    /*
     const blogForm = () => {
       const hideWhenVisible = { display: addblogVisible ? 'none' : '' }
       const showWhenVisible = { display: addblogVisible ? '' : 'none' }
@@ -139,6 +161,7 @@ const App = () => {
         
       </div>
     )}
+    */
 
     const loginForm = () => (
       <div><h2> Login To Application</h2>
@@ -205,7 +228,7 @@ const App = () => {
       )}
       
       <div>
-      {blogForm()}
+      <BlogForm createBlog={addBlog} />
       </div>  
 
       </div>
