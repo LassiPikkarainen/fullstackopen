@@ -105,6 +105,11 @@ const App = () => {
 }
 
 
+const updateBlog = (blogObject) => {
+  console.log('updating blog ', blogObject)
+}
+
+
     const logoutForm = () => (
       <div>
         <form onSubmit={handleLogout}>
@@ -189,7 +194,18 @@ const App = () => {
       </div>
     )
 
+  function compareLikes(a, b) {
+    if (a.likes < b.likes){
+      return 1;
+    }
+    else if (a.likes > b.likes){
+      return -1;
+    }
+    else{
+      return 0;
+    }
 
+  }
       
 
   const Notification = ({ message }) => {
@@ -223,12 +239,12 @@ const App = () => {
 
        <h2>blogs</h2>
       
-      {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} />
+      {blogs.sort(compareLikes).map(blog =>
+        <Blog key={blog.id} blog={blog} updateBlog={updateBlog}/>
       )}
       
       <div>
-      <BlogForm createBlog={addBlog} />
+      <BlogForm createBlog={addBlog} updateBlog={updateBlog} />
       </div>  
 
       </div>
