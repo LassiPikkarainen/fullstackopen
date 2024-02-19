@@ -59,6 +59,7 @@ blogsRouter.post('/', async (request, response) => {
 })
 
 blogsRouter.delete('/:id', async (request, response) => {
+  console.log(request.user)
   if (request.token == null){
     return response.status(401).json({ error: 'token invalid' })
   }
@@ -112,7 +113,7 @@ blogsRouter.put('/:id', (request, response) => {
       response.json(updatedBlog)
     })
     .catch(error => response.status(400).send(error))
-    
+
 })
 
 
