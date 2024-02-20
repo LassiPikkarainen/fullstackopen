@@ -9,13 +9,13 @@ import BlogForm from './components/blogform'
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('') 
+  const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
   const [errorMessage, setErrorMessage] = useState(null)
 
   //Create blogs
   const [title, setTitle] = useState('')
-  const [author, setAuthor] = useState('') 
+  const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
 
   const [addblogVisible, setaddblogVisible] = useState(false)
@@ -23,45 +23,45 @@ const App = () => {
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedUser')
-    if (loggedUserJSON) {      
-      const user = JSON.parse(loggedUserJSON)      
-      setUser(user)      
-      blogService.setToken(user.token)    
+    if (loggedUserJSON) {
+      const user = JSON.parse(loggedUserJSON)
+      setUser(user)
+      blogService.setToken(user.token)
     }
 
     blogService.getAll().then(blogs =>
       setBlogs( blogs )
-    )  
+    )
   }, [])
 
   //logout handler
   const handleLogout = async (event) => {
-     event.preventDefault() 
-     console.log('logging out')
-     window.localStorage.removeItem('loggedUser')
+    event.preventDefault()
+    console.log('logging out')
+    window.localStorage.removeItem('loggedUser')
   }
 
   //login handler
-  const handleLogin = async (event) => {    
-    event.preventDefault()    
+  const handleLogin = async (event) => {
+    event.preventDefault()
     console.log('logging in with', username, password)
 
-    try {  
-      const user = await loginService.login({username, password,})      
+    try {
+      const user = await loginService.login({ username, password, })
       blogService.setToken(user.token)
-      setUser(user)      
-      setUsername('')      
-      setPassword('')    
+      setUser(user)
+      setUsername('')
+      setPassword('')
       window.localStorage.setItem('loggedUser', JSON.stringify(user))
-    } catch (exception) {      
+    } catch (exception) {
       setErrorMessage('wrong credentials')
-      setTimeout(() => {        
-      setErrorMessage(null)}, 5000)}
+      setTimeout(() => {
+        setErrorMessage(null)}, 5000)}
   }
 
   /*
   const handleBlog = async (event) => {
-    event.preventDefault()    
+    event.preventDefault()
     console.log('Adding blog', title, author, url)
     console.log({
       title: title,
@@ -78,15 +78,15 @@ const App = () => {
         url: url
       })
       setErrorMessage(`A new blog ${title} by ${author} was added`)
-      setTimeout(() => {        
+      setTimeout(() => {
       setErrorMessage(null)}, 5000)
     } catch (exception) {
       setErrorMessage('Creating the blog failed')
-      setTimeout(() => {        
+      setTimeout(() => {
       setErrorMessage(null)}, 5000)}
   }
 */
-  const addBlog = (blogObject) => {    
+  const addBlog = (blogObject) => {
     console.log('Adding blog', blogObject)
     console.log(blogObject)
     setTitle('')
@@ -94,31 +94,31 @@ const App = () => {
     setUrl('')
     try{
       blogService.create(blogObject)
-      setErrorMessage(`A new blog was added`)
-      setTimeout(() => {        
-      setErrorMessage(null)}, 5000)
+      setErrorMessage('A new blog was added')
+      setTimeout(() => {
+        setErrorMessage(null)}, 5000)
     } catch (exception) {
       setErrorMessage('Creating the blog failed')
-      setTimeout(() => {        
-      setErrorMessage(null)}, 5000)}
+      setTimeout(() => {
+        setErrorMessage(null)}, 5000)}
     window.location.reload()
-}
+  }
 
 
-const updateBlog = (blogObject) => {
-  console.log('updating blog ', blogObject)
-}
+  const updateBlog = (blogObject) => {
+    console.log('updating blog ', blogObject)
+  }
 
 
-    const logoutForm = () => (
-      <div>
-        <form onSubmit={handleLogout}>
+  const logoutForm = () => (
+    <div>
+      <form onSubmit={handleLogout}>
         <button type="submit">logout</button>
-        </form>
-      </div>
-    )
+      </form>
+    </div>
+  )
 
-    /*
+  /*
     const blogForm = () => {
       const hideWhenVisible = { display: addblogVisible ? 'none' : '' }
       const showWhenVisible = { display: addblogVisible ? '' : 'none' }
@@ -140,7 +140,7 @@ const updateBlog = (blogObject) => {
             />
         </div>
         <div>
-          Author: 
+          Author:
         <input
               type="text"
               value={author}
@@ -159,21 +159,21 @@ const updateBlog = (blogObject) => {
         </div>
 
         <button type="submit">create</button>
-        
+
         </form>
         <button onClick={() => setaddblogVisible(false)}>cancel</button>
         </div>
-        
+
       </div>
     )}
     */
 
-    const loginForm = () => (
-      <div><h2> Login To Application</h2>
+  const loginForm = () => (
+    <div><h2> Login To Application</h2>
       <form onSubmit={handleLogin}>
         <div>
           username
-            <input
+          <input
             type="text"
             value={username}
             name="Username"
@@ -182,7 +182,7 @@ const updateBlog = (blogObject) => {
         </div>
         <div>
           password
-            <input
+          <input
             type="password"
             value={password}
             name="Password"
@@ -190,29 +190,29 @@ const updateBlog = (blogObject) => {
           />
         </div>
         <button type="submit">login</button>
-      </form>      
-      </div>
-    )
+      </form>
+    </div>
+  )
 
   function compareLikes(a, b) {
     if (a.likes < b.likes){
-      return 1;
+      return 1
     }
     else if (a.likes > b.likes){
-      return -1;
+      return -1
     }
     else{
-      return 0;
+      return 0
     }
 
   }
-      
+
 
   const Notification = ({ message }) => {
     if (message === null) {
       return null
     }
-  
+
     return (
       <div className="error">
         {message}
@@ -234,22 +234,22 @@ const updateBlog = (blogObject) => {
       {!user && loginForm()}
       <Notification message={errorMessage} />
       {user && <div>
-       <p>{user.name} logged in</p>
-       {logoutForm()}
+        <p>{user.name} logged in</p>
+        {logoutForm()}
 
-       <h2>blogs</h2>
-      
-      {blogs.sort(compareLikes).map(blog =>
-        <Blog key={blog.id} blog={blog} updateBlog={updateBlog} user={user}/>
-      )}
-      
-      <div>
-      <BlogForm createBlog={addBlog} updateBlog={updateBlog} />
-      </div>  
+        <h2>blogs</h2>
+
+        {blogs.sort(compareLikes).map(blog =>
+          <Blog key={blog.id} blog={blog} updateBlog={updateBlog} user={user}/>
+        )}
+
+        <div>
+          <BlogForm createBlog={addBlog} updateBlog={updateBlog} />
+        </div>
 
       </div>
-    } 
-      
+      }
+
     </div>
   )
 }

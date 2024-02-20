@@ -7,7 +7,7 @@ const BlogForm = ({ createBlog, updateBlog }) => {
   const [addblogVisible, setaddblogVisible] = useState(false)
   //Create blogs
   const [title, setTitle] = useState('')
-  const [author, setAuthor] = useState('') 
+  const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
   const [errorMessage, setErrorMessage] = useState(null)
 
@@ -21,7 +21,7 @@ const BlogForm = ({ createBlog, updateBlog }) => {
     setnewBlog('')
   }
   const handleBlog = async (event) => {
-    event.preventDefault()    
+    event.preventDefault()
     console.log('Adding blog', title, author, url)
     console.log({
       title: title,
@@ -40,16 +40,16 @@ const BlogForm = ({ createBlog, updateBlog }) => {
       })
 
       setErrorMessage(`A new blog ${title} by ${author} was added`)
-      setTimeout(() => {        
-      setErrorMessage(null)}, 5000)
+      setTimeout(() => {
+        setErrorMessage(null)}, 5000)
     } catch (exception) {
       setErrorMessage('Creating the blog failed')
-      setTimeout(() => {        
-      setErrorMessage(null)}, 5000)
-      console.log("failed")
+      setTimeout(() => {
+        setErrorMessage(null)}, 5000)
+      console.log('failed')
     }
   }
-/*
+  /*
   return (
     <div>
       <h2>Create a new Blog</h2>
@@ -74,41 +74,41 @@ const BlogForm = ({ createBlog, updateBlog }) => {
         <button onClick={() => setaddblogVisible(true)}>Add a blog</button>
       </div>
       <div style={showWhenVisible}>
-      <form onSubmit={handleBlog}>
-      <div>
+        <form onSubmit={handleBlog}>
+          <div>
       Title:
-      <input
-            type="text"
-            value={title}
-            name="title"
-            onChange={({ target }) => setTitle(target.value)}
-          />
-      </div>
-      <div>
-        Author: 
-      <input
-            type="text"
-            value={author}
-            name="author"
-            onChange={({ target }) => setAuthor(target.value)}
-          />
-      </div>
-      <div>
+            <input
+              type="text"
+              value={title}
+              name="title"
+              onChange={({ target }) => setTitle(target.value)}
+            />
+          </div>
+          <div>
+        Author:
+            <input
+              type="text"
+              value={author}
+              name="author"
+              onChange={({ target }) => setAuthor(target.value)}
+            />
+          </div>
+          <div>
         Url:
-      <input
-            type="text"
-            value={url}
-            name="url"
-            onChange={({ target }) => setUrl(target.value)}
-          />
+            <input
+              type="text"
+              value={url}
+              name="url"
+              onChange={({ target }) => setUrl(target.value)}
+            />
+          </div>
+
+          <button type="submit">create</button>
+
+        </form>
+        <button onClick={() => setaddblogVisible(false)}>cancel</button>
       </div>
 
-      <button type="submit">create</button>
-      
-      </form>
-      <button onClick={() => setaddblogVisible(false)}>cancel</button>
-      </div>
-      
     </div>
   )
 }
