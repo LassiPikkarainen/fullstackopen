@@ -75,7 +75,8 @@ const Blog = ({ blog, user }) => {
 
       </div>
       <div style={showWhenVisible}>
-        <div>{blog.title} {blog.author} <button onClick={() => setExtended(false)}>Hide</button></div>
+      <button onClick={() => setExtended(false)}>Hide</button>
+        <div>{blog.title}</div><div> {blog.author}</div>
         <div>
           <form onSubmit={updateBlog}>
             Likes: {blog.likes} <button type="submit">Like</button>
