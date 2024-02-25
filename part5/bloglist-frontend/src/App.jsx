@@ -104,9 +104,33 @@ const App = () => {
     window.location.reload()
   }
 
-
+  /*
   const updateBlog = (blogObject) => {
     console.log('updating blog ', blogObject)
+  }
+  */
+
+  const updateBlog = async (blog) => {
+    console.log('Liking blog', blog.title, blog.author, blog.url)
+    console.log({
+      title: blog.title,
+      author: blog.author,
+      url: blog.url
+    })
+
+    try{
+      await blogService.update({
+        id: blog.id,
+        title: blog.title,
+        author: blog.author,
+        url: blog.url,
+        likes: blog.likes +1
+      })
+
+    } catch (exception) {
+
+      console.log('failed')
+    }
   }
 
 
@@ -240,7 +264,7 @@ const App = () => {
         <h2>blogs</h2>
 
         {blogs.sort(compareLikes).map(blog =>
-          <Blog key={blog.id} blog={blog} updateBlog={updateBlog} user={user} isExtended={false}/>
+          <Blog key={blog.id} blog={blog} user={user} isExtended={false} likeBlog={updateBlog}/>
         )}
 
         <div>

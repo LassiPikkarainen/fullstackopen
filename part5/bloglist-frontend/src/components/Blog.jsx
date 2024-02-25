@@ -2,7 +2,7 @@ import { useState } from 'react'
 import blogService from '../services/blogs'
 import PropTypes from 'prop-types'
 
-const Blog = ({ blog, user, isExtended }) => {
+const Blog = ({ blog, user, isExtended, likeBlog }) => {
   const [extended, setExtended] = useState(isExtended)
   const [ownBlog, setOwnblog] = useState(false)
 
@@ -14,8 +14,19 @@ const Blog = ({ blog, user, isExtended }) => {
     marginBottom: 5
   }
 
+  
   const updateBlog = async (event) => {
     event.preventDefault()
+
+    likeBlog({
+        id: blog.id,
+        title: blog.title,
+        author: blog.author,
+        url: blog.url,
+        likes: blog.likes +1
+    })
+
+    /*
     console.log('Liking blog', blog.title, blog.author, blog.url)
     console.log({
       title: blog.title,
@@ -36,7 +47,9 @@ const Blog = ({ blog, user, isExtended }) => {
 
       console.log('failed')
     }
+    */
   }
+  
 
   const removeBlog = async (event) => {
     event.preventDefault()

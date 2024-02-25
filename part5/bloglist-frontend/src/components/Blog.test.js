@@ -59,3 +59,36 @@ test('clicking show-button causes url and likes to show', async () => {
   expect(likesFromComponent).toBeDefined()
   expect(userFromComponent).toBeDefined()
 })
+
+test('Pressing like twice calls event handler twice', async () => {
+
+  const blog = {
+    title: "blog1234",
+    author: "name",
+    url: "url",
+    likes: 123,
+    user: "user"
+  }
+    
+
+  const User = {
+    username: "user",
+    name: "name of user"
+  }
+
+  const mockHandler = jest.fn()
+
+  render(<Blog blog={blog} user={User} isExtended={false} likeBlog={mockHandler}/>)
+
+  const likesStart = blog.likes
+
+  const user = userEvent.setup()
+
+  const button = screen.getByText('Like')
+  
+  await user.click(button)
+  await user.click(button)
+
+  expect(mockHandler.mock.calls).toHaveLength(2)
+
+})
