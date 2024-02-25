@@ -2,8 +2,8 @@ import { useState } from 'react'
 import blogService from '../services/blogs'
 import PropTypes from 'prop-types'
 
-const Blog = ({ blog, user }) => {
-  const [extended, setExtended] = useState(false)
+const Blog = ({ blog, user, isExtended }) => {
+  const [extended, setExtended] = useState(isExtended)
   const [ownBlog, setOwnblog] = useState(false)
 
   const blogStyle = {
@@ -71,18 +71,19 @@ const Blog = ({ blog, user }) => {
     <div style={blogStyle}>      <div>
 
       <div style={hideWhenVisible}>
-        <div>{blog.title} {blog.author} <button onClick={() => setExtended(true)}>Extend</button></div>
+        <div>{blog.title}</div><div> {blog.author} <button onClick={() => setExtended(true)}>Extend</button></div>
 
       </div>
       <div style={showWhenVisible}>
-      <button onClick={() => setExtended(false)}>Hide</button>
-        <div>{blog.title}</div><div> {blog.author}</div>
+
+        <div>{blog.title} {blog.author} <button onClick={() => setExtended(false)}>Hide</button></div>
+        <div> {blog.url} </div>
         <div>
           <form onSubmit={updateBlog}>
-            Likes: {blog.likes} <button type="submit">Like</button>
+          <div>Likes:</div>   {blog.likes} <button type="submit">Like</button>
           </form>
         </div>
-        <div>Added by: {blog.user.name} </div>
+        <div><div>Added by: </div> {blog.user.name} </div>
 
         <div style={ShowIfOwn}>
           <div>

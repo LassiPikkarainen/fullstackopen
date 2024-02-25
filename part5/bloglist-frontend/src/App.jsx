@@ -240,7 +240,7 @@ const App = () => {
         <h2>blogs</h2>
 
         {blogs.sort(compareLikes).map(blog =>
-          <Blog key={blog.id} blog={blog} updateBlog={updateBlog} user={user}/>
+          <Blog key={blog.id} blog={blog} updateBlog={updateBlog} user={user} isExtended={false}/>
         )}
 
         <div>
