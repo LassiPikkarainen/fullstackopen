@@ -41,6 +41,7 @@ blogsRouter.post('/', async (request, response) => {
       user: activeuser._id
     })
 
+
     
     if (!blog.likes) {
       blog.likes = 0

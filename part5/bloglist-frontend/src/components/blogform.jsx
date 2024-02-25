@@ -12,10 +12,16 @@ const BlogForm = ({ createBlog, updateBlog }) => {
   const [errorMessage, setErrorMessage] = useState(null)
 
   const addBlog = (event) => {
+    const newBlog = {
+      title: title,
+      author: author,
+      url: url
+    }
     event.preventDefault()
     createBlog({
-      content: newBlog,
-      important: true
+      title: title,
+      author: author,
+      url: url
     })
 
     setnewBlog('')
@@ -74,7 +80,7 @@ const BlogForm = ({ createBlog, updateBlog }) => {
         <button onClick={() => setaddblogVisible(true)}>Add a blog</button>
       </div>
       <div style={showWhenVisible}>
-        <form onSubmit={handleBlog}>
+        <form onSubmit={addBlog}>
           <div>
       Title:
             <input
@@ -82,6 +88,7 @@ const BlogForm = ({ createBlog, updateBlog }) => {
               value={title}
               name="title"
               onChange={({ target }) => setTitle(target.value)}
+              id='blogtitle'
             />
           </div>
           <div>
@@ -91,6 +98,7 @@ const BlogForm = ({ createBlog, updateBlog }) => {
               value={author}
               name="author"
               onChange={({ target }) => setAuthor(target.value)}
+              id='blogauthor'
             />
           </div>
           <div>
@@ -100,6 +108,7 @@ const BlogForm = ({ createBlog, updateBlog }) => {
               value={url}
               name="url"
               onChange={({ target }) => setUrl(target.value)}
+              id='blogurl'
             />
           </div>
 

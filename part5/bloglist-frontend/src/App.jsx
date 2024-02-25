@@ -86,14 +86,18 @@ const App = () => {
       setErrorMessage(null)}, 5000)}
   }
 */
-  const addBlog = (blogObject) => {
+  const addBlog = async (blogObject) => {
     console.log('Adding blog', blogObject)
     console.log(blogObject)
     setTitle('')
     setAuthor('')
     setUrl('')
     try{
-      blogService.create(blogObject)
+      await blogService.create({
+        title: blog.title,
+        author: blog.author,
+        url: blog.url
+      })
       setErrorMessage('A new blog was added')
       setTimeout(() => {
         setErrorMessage(null)}, 5000)
